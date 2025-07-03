@@ -45,7 +45,9 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
-
+        if($user->role == 'aucun'){
+            return redirect()->intended(route('home', absolute: false));
+        }
         return redirect()->intended(route('dashboard', absolute: false));
     }
 }

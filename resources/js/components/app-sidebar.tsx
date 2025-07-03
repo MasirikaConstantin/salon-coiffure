@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Calendar, Folder, LayoutGrid, Package, Scissors, ShoppingBasket, Truck, UserCog, Users, Warehouse } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -13,6 +13,82 @@ const mainNavItems: NavItem[] = [
         href: '/dashboard',
         icon: LayoutGrid,
     },
+
+    {
+        title: 'Gestion Salon',
+        icon: Scissors,
+        items: [
+          {
+            title: 'Rendez-vous',
+            href: '/appointments',
+            icon: Calendar,
+          },
+          {
+            title: 'Clients',
+            href: '/clients',
+            icon: Users,
+          },
+          {
+            title: 'Employés',
+            href: '/employees',
+            icon: UserCog,
+          },
+        ],
+      },
+      {
+        title: 'Inventaire',
+        icon: Package,
+        items: [
+          {
+            title: 'Produits',
+            href: '/products',
+            icon: ShoppingBasket,
+          },
+          {
+            title: 'Stock',
+            href: '/inventory',
+            icon: Warehouse,
+          },
+          {
+            title: 'Commandes',
+            href: '/orders',
+            icon: Truck,
+          },
+        ],
+      },
+      {
+        title: 'Utilisateurs',
+        href: '/users',
+        icon: UserCog,
+        items: [
+          {
+            title: 'Utilisateurs',
+            href: '/utilisateurs',
+            icon: UserCog,
+          },
+          {
+            title: 'Permissions',
+            href: '/permissions',
+            icon: UserCog,
+          },
+          {
+            title: 'Rôles',
+            href: '/roles',
+            icon: UserCog,
+          },
+          {
+            title: 'Permissions',
+            href: '/permissions',
+            icon: UserCog,
+          },
+          {
+            title: 'Permissions',
+            href: '/permissions',
+            icon: UserCog,
+          },
+        ],
+
+      }
 ];
 
 const footerNavItems: NavItem[] = [
@@ -48,7 +124,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

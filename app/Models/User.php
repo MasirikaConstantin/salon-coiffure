@@ -33,8 +33,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-        'ref',
-        'role',
     ];
 
     /**
@@ -56,5 +54,9 @@ class User extends Authenticatable
         static::creating(function ($model) {
             $model->ref = \Illuminate\Support\Str::uuid();
         });
+    }
+    public function hasAnyRole($roles)
+    {
+        return in_array($this->role, (array) $roles);
     }
 }

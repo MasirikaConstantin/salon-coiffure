@@ -17,9 +17,11 @@ export interface NavGroup {
 
 export interface NavItem {
     title: string;
-    href: string;
+    href?: string;
     icon?: LucideIcon | null;
     isActive?: boolean;
+    items?: NavItem[]; // Pour les sous-menus
+    isOpen?: boolean; // Pour gérer l'état ouvert/fermé
 }
 
 export interface SharedData {
@@ -28,6 +30,11 @@ export interface SharedData {
     auth: Auth;
     ziggy: Config & { location: string };
     sidebarOpen: boolean;
+    flash: {
+        error?: string;
+        success?: string;
+        message?: string;
+    };
     [key: string]: unknown;
 }
 
@@ -38,6 +45,9 @@ export interface User {
     avatar?: string;
     email_verified_at: string | null;
     created_at: string;
+    role: string;
+    ref: string;
+    is_active: boolean;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }

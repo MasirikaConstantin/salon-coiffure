@@ -1,16 +1,21 @@
+import TextLink from '@/components/text-link';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { AlertCircleIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
-
+    const { auth,flash } = usePage<SharedData>().props;
+    flash.error && toast.error(flash.error)
     return (
         <>
             <Head title="Welcome">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
+            
             <div className="flex min-h-screen flex-col items-center ">
                 <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
                     
@@ -23,16 +28,30 @@ export default function Welcome() {
                             <div >
                             {auth.user ? (
                                 <>
-                                <p>Vous êtes connecté en tant que {auth.user.name}</p>
+                                <p className=''>Vous êtes connecté en tant que <span className="font-semibold ">{auth.user.name}</span></p> 
                                 <br />
-                                <Button asChild variant={'secondary'}>
-                                    <Link
-                                        href={route('dashboard')}
-                                        className=""
-                                    >
-                                        Tableau de bord
-                                    </Link>
-                                </Button>
+                                {auth.user.role !== 'aucun' ?(
+                                    <Button asChild variant={'secondary'}>
+                                        <Link
+                                            href={route('dashboard')}
+                                            className=""
+                                        >
+                                            Tableau de bord
+                                        </Link>
+                                    </Button>
+                                ):(
+                                    <Alert variant={'destructive'}>
+                                        <AlertCircleIcon />        <AlertTitle>Erreur : </AlertTitle>
+                                        <AlertDescription>
+                                    <p>Contactez votre administrateur, vous n'avez pas de rôle </p>
+                                    <Button asChild variant={'secondary'}>
+                                    <Link href={route('logout')} method="post" className="text-sm">
+                                                        Se deconnecter
+                                                    </Link>
+                                    </Button>
+                                    </AlertDescription>
+                                    </Alert>
+                                )}
                                 </>
                             
                         ) : (
@@ -61,7 +80,7 @@ export default function Welcome() {
                         <div className="relative -mb-px aspect-[335/376] w-full shrink-0 overflow-hidden rounded-t-lg  lg:mb-0 lg:-ml-px lg:aspect-auto lg:w-[438px] lg:rounded-t-none lg:rounded-r-lg bg-amber-100">
                             
                             <div className="absolute inset-0 rounded-t-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:rounded-t-none lg:rounded-r-lg dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]" />
-                            <img src="/images/logo.jpeg" className="relative object-cover -mt-[4.9rem] -ml-8 hidden w-[440px] h-[440px] max-w-none lg:-mt-[6.6rem] lg:ml-0 dark:block"/>
+                            <img src="/images/logo.jpeg" className="relative object-cover -mt-[4.9rem] -ml-8 hidden w-[450px] h-[490px] max-w-none lg:-mt-[6.6rem] lg:ml-0 dark:block"/>
                         </div>
                     </main>
                 </div>

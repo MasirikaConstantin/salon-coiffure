@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('telephone', 20)->nullable();
             $table->string('adresse', 255)->nullable();
             $table->date('date_embauche')->nullable();
-            $table->enum('role', ['admin', 'gerant', 'coiffeur', 'caissier'])->nullable();
+            $table->enum('role', ['admin', 'gerant', 'coiffeur', 'caissier', 'aucun'])->default('aucun');
             $table->boolean('is_active')->default(true);
             $table->timestampTz('last_login_at')->nullable();
             $table->ipAddress('last_login_ip')->nullable();
