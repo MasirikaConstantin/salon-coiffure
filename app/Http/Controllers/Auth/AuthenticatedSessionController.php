@@ -31,7 +31,14 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        // Mettre à jour les informations de connexion
+        $user = $request->user();
+        $user->last_login_at = now();
+        $user->last_login_ip = $request->ip();
+        $user->save();
+
         $request->session()->regenerate();
+
         if($request->user()->role == 'aucun'){
             return redirect()->intended(route('home', absolute: false));
         }

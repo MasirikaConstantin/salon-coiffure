@@ -63,7 +63,7 @@ const mainNavItems: NavItem[] = [
       },
       {
         title: 'Utilisateurs',
-        href: '/users',
+        href: '/utilisateurs',
         icon: UserCog,
         items: [
           {

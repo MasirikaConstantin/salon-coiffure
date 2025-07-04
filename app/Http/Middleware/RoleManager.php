@@ -14,7 +14,7 @@ class RoleManager
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-        public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
         if (!Auth::check()) {
             return redirect()->route('login');
@@ -34,16 +34,7 @@ class RoleManager
             return $next($request);
         }
 
-        // Redirection basée sur le rôle de l'utilisateur
-        return redirect()->to(
-            match ($authUserRole) {
-                'admin'      => route('admin.dashboard'),
-                'gerant'     => route('gerant.dashboard'),
-                'coiffeur' => route('coiffeur.dashboard'),
-                'caissier' => route('caissier.dashboard'),
-                'aucun' => route('home'),
-                default       => '/'
-            }
-        )->with('error', 'Accès non autorisé.');
+        // Retourne une réponse 403 au lieu de rediriger
+        abort(403, 'Accès non autorisé.');
     }
 }
