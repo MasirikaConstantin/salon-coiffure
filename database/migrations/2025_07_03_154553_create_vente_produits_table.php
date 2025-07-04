@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Produit::class)->nullable()->constrained()->nullOnDelete();
             $table->integer('quantite')->default(1);
             $table->decimal('prix_unitaire', 10, 2);
+            $table->decimal('remise', 10, 2)->default(0);
             $table->decimal('montant_total', 10, 2);
             $table->uuid('ref')->unique();
             $table->softDeletesTz();

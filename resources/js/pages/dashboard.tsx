@@ -1,7 +1,8 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Auth, SharedData, type BreadcrumbItem } from '@/types';
+import { Head, usePage } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -10,9 +11,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard() {
+export default function Dashboard({auth}: {auth: Auth}) {
+    const { flash } = usePage<SharedData>().props;
+    flash.error && toast.error(flash.error)
+    flash.success && toast.success(flash.success)
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout auth={auth} breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UtilisateurController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,5 +17,6 @@ Route::middleware(['auth', 'verified', 'role:admin,gerant,coiffeur,caissier'])->
     })->name('dashboard');
 });
 
+Route::resource('utilisateurs', UtilisateurController::class)->middleware('role:admin');
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

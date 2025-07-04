@@ -66,26 +66,13 @@ const mainNavItems: NavItem[] = [
             href: '/utilisateurs',
             icon: UserCog,
           },
-          {
-            title: 'Permissions',
-            href: '/permissions',
-            icon: UserCog,
-          },
+          
           {
             title: 'Rôles',
             href: '/roles',
             icon: UserCog,
           },
-          {
-            title: 'Permissions',
-            href: '/permissions',
-            icon: UserCog,
-          },
-          {
-            title: 'Permissions',
-            href: '/permissions',
-            icon: UserCog,
-          },
+          
         ],
 
       }
