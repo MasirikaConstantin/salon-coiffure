@@ -35,6 +35,8 @@ export interface SharedData {
         success?: string;
         message?: string;
     };
+    succursales?: Succursale[];
+    succursale?: Succursale;
     [key: string]: unknown;
 }
 
@@ -51,3 +53,15 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export type Succursale = {
+    id: number;
+    nom: string;
+    adresse: string;
+    telephone: string;
+    email?: string;
+    date_creation: string;
+    ref: string;
+    created_at: string;
+    updated_at: string;
+};

@@ -4,62 +4,62 @@ namespace App\Http\Controllers;
 
 use App\Models\Succursale;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class SuccursaleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $succursales = Succursale::orderBy('created_at', 'desc')->get();
+        return Inertia::render('Succursales/Index', [
+            'succursales' => $succursales,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return Inertia::render('Succursales/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nom' => 'required|string|max:100',
+            'adresse' => 'required|string',
+            'telephone' => 'required|string|max:20',
+            'email' => 'nullable|email|max:100',
+        ]);
+
+        Succursale::create($validated);
+
+        return redirect()->route('succursales.index')->with('success', 'Succursale créée avec succès');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Succursale $succursale)
+    public function edit(string $succursale)
     {
-        //
+        $succursale = Succursale::where('ref', $succursale)->first();
+        return Inertia::render('Succursales/Edit', [
+            'succursale' => $succursale,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Succursale $succursale)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Succursale $succursale)
     {
-        //
+        $validated = $request->validate([
+            'nom' => 'required|string|max:100',
+            'adresse' => 'required|string',
+            'telephone' => 'required|string|max:20',
+            'email' => 'nullable|email|max:100',
+        ]);
+
+        $succursale->update($validated);
+
+        return redirect()->route('succursales.index')->with('success', 'Succursale mise à jour avec succès');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Succursale $succursale)
     {
-        //
+        $succursale->delete();
+        return redirect()->route('succursales.index')->with('success', 'Succursale supprimée avec succès');
     }
 }

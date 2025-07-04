@@ -2,13 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Succursale extends Model
 {
+    use HasFactory;
     protected $fillable = [
-        'name',
-        'address',
+        'nom',
+        'adresse',
+        'telephone',
+        'email',
+        'date_creation',
+        'ref'
+    ];
+
+    protected $casts = [
+        'date_creation' => 'date',
     ];
     protected static function boot()
     {

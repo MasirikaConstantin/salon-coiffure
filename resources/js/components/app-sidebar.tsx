@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Calendar, Folder, LayoutGrid, Package, Scissors, ShoppingBasket, Truck, UserCog, Users, Warehouse } from 'lucide-react';
+import { BookOpen, Calendar, Folder, HomeIcon, LayoutGrid, Package, Scissors, ShoppingBasket, Truck, UserCog, Users, Warehouse } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -18,6 +18,11 @@ const mainNavItems: NavItem[] = [
         title: 'Gestion Salon',
         icon: Scissors,
         items: [
+          {
+            title: 'Succursale',
+            href: '/succursales',
+            icon: HomeIcon,
+          },
           {
             title: 'Rendez-vous',
             href: '/appointments',
@@ -116,3 +121,5 @@ export function AppSidebar() {
         </Sidebar>
     );
 }
+
+

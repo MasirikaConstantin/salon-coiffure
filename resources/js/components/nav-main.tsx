@@ -1,6 +1,7 @@
+// components/nav-main.tsx
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { NavMenuItem } from './nav-menu-item';
+import { SidebarItem } from '@/components/ui/sidebar-item';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
   return (
@@ -8,7 +9,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
-          <NavMenuItem key={item.title} item={item} />
+          <SidebarItem key={item.title} item={item} />
         ))}
       </SidebarMenu>
     </SidebarGroup>

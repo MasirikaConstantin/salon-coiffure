@@ -17,7 +17,6 @@ return new class extends Migration
             $table->text('adresse');
             $table->string('telephone', 20);
             $table->string('email', 100)->nullable();
-            $table->date('date_creation');
             $table->uuid('ref')->unique();
             $table->timestamps();
         });
