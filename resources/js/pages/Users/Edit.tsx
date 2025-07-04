@@ -72,7 +72,7 @@ export default function UserEdit({ auth, user }: { auth: Auth; user: any }) {
                         <Avatar className="h-16 w-16">
                             <AvatarImage src={data.current_avatar ? `/storage/${data.current_avatar}` : undefined} />
                             <AvatarFallback>
-                                {user.name.split(' ').map(n => n[0]).join('')}
+                                {user.name.split(' ').map((n: string) => n[0]).join('')}
                             </AvatarFallback>
                         </Avatar>
                         
@@ -164,7 +164,7 @@ export default function UserEdit({ auth, user }: { auth: Auth; user: any }) {
                                     <SelectValue placeholder="Sélectionnez une succursale" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {usePage<SharedData>().props.succursales.map((succursale) => (
+                                    {usePage<SharedData>().props?.succursales?.map((succursale) => (
                                         <SelectItem key={succursale.id} value={succursale.id.toString()}>
                                             {succursale.nom}
                                         </SelectItem>

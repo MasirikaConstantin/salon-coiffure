@@ -82,7 +82,7 @@ export default function UserIndex({ auth }: { auth: Auth }) {
                                         <Avatar>
                                             <AvatarImage src={user.avatar ? `/storage/${user.avatar}` : undefined} />
                                             <AvatarFallback>
-                                                {user.name.split(' ').map(n => n[0]).join('')}
+                                                {user.name.split(' ').map((n: string) => n[0]).join('')}
                                             </AvatarFallback>
                                         </Avatar>
                                     </TableCell>

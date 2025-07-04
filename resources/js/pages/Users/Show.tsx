@@ -45,7 +45,7 @@ export default function UserShow({ auth, user }: { auth: Auth; user: any }) {
                                 <Avatar className="h-24 w-24">
                                     <AvatarImage src={user.avatar ? `/storage/${user.avatar}` : undefined} />
                                     <AvatarFallback>
-                                        {user.name.split(' ').map(n => n[0]).join('')}
+                                        {user.name.split(' ').map((n: string) => n[0]).join('')}
                                     </AvatarFallback>
                                 </Avatar>
                                 <CardTitle className="text-center">{user.name}</CardTitle>

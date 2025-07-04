@@ -186,7 +186,7 @@ export default function UserCreate({ auth }: { auth: Auth }) {
                             <Switch
                                 id="is_active"
                                 checked={data.is_active}
-                                onCheckedChange={(checked) => setData('is_active', checked)}
+                                onCheckedChange={(checked: boolean) => setData('is_active', checked)}
                             />
                             <Label htmlFor="is_active">Compte actif</Label>
                         </div>
@@ -200,7 +200,7 @@ export default function UserCreate({ auth }: { auth: Auth }) {
                                     <SelectValue placeholder="Sélectionnez une succursale" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {usePage<SharedData>().props.succursales.map((succursale) => (
+                                    {usePage<SharedData>().props?.succursales?.map((succursale) => (
                                         <SelectItem key={succursale.id} value={succursale.id.toString()}>
                                             {succursale.nom}
                                         </SelectItem>
