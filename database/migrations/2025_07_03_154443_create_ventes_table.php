@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Client::class)->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(Succursale::class)->nullable()->constrained()->nullOnDelete();
-            $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('vendeur_id')->nullable()->constrained('users')->nullOnDelete();
             $table->decimal('remise', 10, 2)->default(0);
             $table->decimal('montant_total', 10, 2);
             $table->enum('mode_paiement', ['espèces', 'carte', 'chèque', 'autre'])->default('espèces');

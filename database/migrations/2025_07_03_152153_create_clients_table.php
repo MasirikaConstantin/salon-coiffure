@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->uuid('ref')->unique();
             $table->foreignIdFor(Succursale::class)->nullable()->constrained()->nullOnDelete();
-            $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
+            $table->foreignId("enregistrer_par_id")->nullable()->constrained('users')->nullOnDelete();
             $table->softDeletesTz();
             $table->timestamps();
         });
