@@ -63,6 +63,17 @@ const mainNavItems: NavItem[] = [
         ],
       },
       {
+        title: 'Ventes',
+        icon: ShoppingBasket,
+        items: [
+          {
+            title: 'Ventes',
+            href: '/ventes',
+            icon: ShoppingBasket,
+          },
+        ],
+      },
+      {
         title: 'Administration',
         icon: UserCheck2,
         items: [

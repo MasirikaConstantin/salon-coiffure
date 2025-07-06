@@ -77,10 +77,10 @@ export default function Welcome() {
                         )}
                             </div>
                         </div>
-                        <div className="relative -mb-px aspect-[335/376] w-full shrink-0 overflow-hidden rounded-t-lg  lg:mb-0 lg:-ml-px lg:aspect-auto lg:w-[438px] lg:rounded-t-none lg:rounded-r-lg bg-amber-100">
+                        <div className="relative -mb-px aspect-[335/376] w-full shrink-0 overflow-hidden rounded-t-lg  lg:mb-0 lg:-ml-px lg:aspect-auto lg:w-[498px] lg:rounded-t-none lg:rounded-r-lg bg-amber00">
                             
                             <div className="absolute inset-0 rounded-t-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:rounded-t-none lg:rounded-r-lg dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]" />
-                            <img src="/images/logo.jpeg" className="relative object-cover -mt-[4.9rem] -ml-8 hidden w-[450px] h-[490px] max-w-none lg:-mt-[6.6rem] lg:ml-0 dark:block"/>
+                            <img src="/images/logo.png" className="relative object-codver -mt-[4.9rem] -ml-8 hidden w-[500px] h-[500px] max-w-none lg:-mt-[6.6rem] lg:ml-0 dark:block"/>
                         </div>
                     </main>
                 </div>
