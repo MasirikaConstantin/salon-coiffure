@@ -25,5 +25,8 @@ Route::middleware('auth','actif','role:admin')->group(function () {
 Route::middleware('auth','actif','role:admin,gerant')->group(function () {
     Route::resource('utilisateurs', \App\Http\Controllers\UserController::class);
 });
+Route::middleware('auth','actif','role:admin,gerant,coiffeur')->group(function () {
+    Route::resource('clients', \App\Http\Controllers\ClientController::class);
+});
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

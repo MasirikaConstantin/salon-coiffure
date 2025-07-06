@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Succursale;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Inertia\Inertia;
 
 class SuccursaleController extends Controller
 {
+    use HasFactory, SoftDeletes;
     public function index()
     {
         $succursales = Succursale::orderBy('created_at', 'desc')->get();

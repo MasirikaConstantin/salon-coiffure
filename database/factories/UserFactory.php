@@ -3,42 +3,38 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
-
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    public function definition()
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'avatar' => $this->faker->imageUrl(200, 200, 'people'),
+            'password' => bcrypt('password'),
+            'telephone' => $this->faker->phoneNumber(),
+            'adresse' => $this->faker->address(),
+            'date_embauche' => $this->faker->dateTimeBetween('-5 years', 'now'),
+            'role' => $this->faker->randomElement(['admin', 'gerant', 'coiffeur', 'caissier', 'aucun']),
+            'is_active' => $this->faker->boolean(80),
+            'last_login_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
+            'last_login_ip' => $this->faker->ipv4(),
+            'ref' => Str::uuid(),
+            'succursale_id' => null,
+            'created_by' => null,
+            'updated_by' => null,
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function configure()
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->afterCreating(function ($user) {
+            $user->created_by = $user->id;
+            $user->updated_by = $user->id;
+            $user->save();
+        });
     }
 }

@@ -37,9 +37,28 @@ export interface SharedData {
     };
     succursales?: Succursale[];
     succursale?: Succursale;
+    clients?: Client[];
+    client?: Client;
     [key: string]: unknown;
 }
 
+export type Client = {
+    id: number;
+    name: string;
+    telephone: string | null;
+    email: string | null;
+    notes: string | null;
+    ref: string;
+    succursale_id: number | null;
+    enregistrer_par_id: number | null;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+    succursale?: Succursale;
+    enregistre_par?: User;
+};
+
+   
 export interface User {
     id: number;
     name: string;

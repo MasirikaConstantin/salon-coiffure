@@ -15,9 +15,19 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+       // Créer 5 succursales
+//\App\Models\Succursale::factory()->count(5)->create();
+/*
+// Créer 10 utilisateurs avec une succursale aléatoire
+\App\Models\User::factory()->count(10)->create([
+    'succursale_id' => \App\Models\Succursale::inRandomOrder()->first()->id
+]);
+*//*
+// Créer 50 clients avec une succursale et un utilisateur aléatoire
+\App\Models\Client::factory()->count(50)->create([
+    'succursale_id' => \App\Models\Succursale::inRandomOrder()->first()->id,
+    'enregistrer_par_id' => \App\Models\User::inRandomOrder()->first()->id
+]);*/
+
     }
 }
