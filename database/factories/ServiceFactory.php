@@ -5,18 +5,18 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class RendezvousFactory extends Factory
+class ServiceFactory extends Factory
 {
     public function definition()
     {
         return [
-            'date_heure' => $this->faker->dateTimeBetween('now', '+1 month'),
-            'duree_prevue' => $this->faker->numberBetween(15, 120),
-            'statut' => $this->faker->randomElement(['confirmé', 'annulé', 'terminé', 'no-show']),
-            'notes' => $this->faker->paragraph(),
+            'name' => $this->faker->words(3, true),
+            'description' => $this->faker->paragraph(),
+            'duree_minutes' => $this->faker->numberBetween(15, 120),
+            'prix' => $this->faker->randomFloat(2, 5000, 10000),
+            'actif' => $this->faker->boolean(90),
             'ref' => Str::uuid(),
-            'client_id' => null,
-            'succursale_id' => null,
+            'user_id' => null,
         ];
     }
 }

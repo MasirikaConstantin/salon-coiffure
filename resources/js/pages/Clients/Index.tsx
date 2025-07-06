@@ -103,8 +103,8 @@ export default function ClientIndex({ auth }: { auth: Auth }) {
                                         {clients.from + index}
                                     </TableCell>
                                     <TableCell className="font-medium">{client.name}</TableCell>
-                                    <TableCell>{client.telephone || '-'}</TableCell>
-                                    <TableCell>{client.email || '-'}</TableCell>
+                                    <TableCell>{client.telephone.slice(0, 15) || '-'}</TableCell>
+                                    <TableCell>{client.email.slice(0, 15) + '...' || '-'}</TableCell>
                                     <TableCell>
                                     {client.succursale?.nom}
                                     </TableCell>

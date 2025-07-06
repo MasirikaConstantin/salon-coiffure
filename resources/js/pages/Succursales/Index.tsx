@@ -60,9 +60,9 @@ export default function SuccursaleIndex({ auth }: { auth: Auth }) {
                         <TableBody>
                             {succursales.map((succursale) => (
                                 <TableRow key={succursale.ref}>
-                                    <TableCell className="font-medium">{succursale.nom}</TableCell>
-                                    <TableCell>{succursale.adresse}</TableCell>
-                                    <TableCell>{succursale.telephone}</TableCell>
+                                    <TableCell className="font-medium">{succursale.nom.slice(0, 15)}</TableCell>
+                                    <TableCell>{succursale.adresse.slice(0, 15)}</TableCell>
+                                    <TableCell>{succursale.telephone.slice(0, 15)}</TableCell>
                                     <TableCell>{succursale.email || '-'}</TableCell>
                                     <TableCell>
                                         {format(new Date(succursale.created_at), 'PPP', { locale: fr })}
