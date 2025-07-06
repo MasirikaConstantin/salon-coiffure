@@ -33,6 +33,11 @@ Route::middleware('auth','actif','role:admin,gerant')->group(function () {
 // Route supplémentaire pour changer le statut
 Route::patch('/stocks/{stock}/toggle-status', [\App\Http\Controllers\StockController::class, 'toggleStatus'])
     ->name('stocks.toggle-status');
+
+    Route::resource('transferts', \App\Http\Controllers\TransfertController::class);
+
+Route::post('/transferts/{transfert}/validate', [\App\Http\Controllers\TransfertController::class, 'validateTransfert'])
+    ->name('transferts.validate');
 });
 Route::middleware('auth','actif','role:admin,gerant,coiffeur')->group(function () {
     Route::resource('clients', \App\Http\Controllers\ClientController::class);

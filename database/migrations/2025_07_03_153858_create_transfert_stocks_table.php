@@ -25,6 +25,7 @@ return new class extends Migration
             $table->dateTime('date_demande');
             $table->dateTime('date_validation')->nullable();
             $table->enum('statut', ['en attente', 'validé', 'refusé'])->default('en attente');
+            $table->uuid('ref')->unique();
             $table->timestamps();
         });
     }
