@@ -36,6 +36,7 @@ Route::patch('/stocks/{stock}/toggle-status', [\App\Http\Controllers\StockContro
 });
 Route::middleware('auth','actif','role:admin,gerant,coiffeur')->group(function () {
     Route::resource('clients', \App\Http\Controllers\ClientController::class);
+    Route::resource('stock-succursales', \App\Http\Controllers\StockSuccursaleController::class);
 });
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

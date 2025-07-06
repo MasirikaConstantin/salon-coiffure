@@ -51,6 +51,11 @@ const mainNavItems: NavItem[] = [
             icon: Warehouse,
           },
           {
+            title: 'Stock-Succursale',
+            href: '/stock-succursales',
+            icon: Warehouse,
+          },
+          {
             title: 'Commandes',
             href: '/commandes',
             icon: Truck,

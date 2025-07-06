@@ -3,63 +3,119 @@
 namespace App\Http\Controllers;
 
 use App\Models\StockSuccursale;
+use App\Models\Produit;
+use App\Models\Succursale;
 use Illuminate\Http\Request;
 
 class StockSuccursaleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = StockSuccursale::with(['produit', 'succursale', 'user'])
+            ->latest();
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->whereHas('produit', function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                })->orWhereHas('succursale', function($q) use ($search) {
+                    $q->where('nom', 'like', "%{$search}%");
+                });
+            });
+        }
+
+        $stocks = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        return inertia('StockSuccursales/Index', [
+            'stocks' => $stocks,
+            'produits' => Produit::active()->get(),
+            'succursales' => Succursale::all(),
+            'filters' => $request->only(['search']),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return inertia('StockSuccursales/Create', [
+            'produits' => Produit::active()->get(),
+            'succursales' => Succursale::all(),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'produit_id' => 'required|exists:produits,id',
+            'succursale_id' => 'required|exists:succursales,id',
+            'quantite' => 'required|integer|min:0',
+            'seuil_alerte' => 'required|integer|min:1',
+        ]);
+
+        // Vérifier l'unicité
+        $exists = StockSuccursale::where('produit_id', $request->produit_id)
+            ->where('succursale_id', $request->succursale_id)
+            ->exists();
+
+        if ($exists) {
+            return back()->withErrors([
+                'produit_id' => 'Ce produit a déjà un stock pour cette succursale'
+            ]);
+        }
+
+        StockSuccursale::create([
+            'produit_id' => $request->produit_id,
+            'succursale_id' => $request->succursale_id,
+            'quantite' => $request->quantite,
+            'seuil_alerte' => $request->seuil_alerte,
+            'user_id' => auth()->id(),
+        ]);
+
+        return redirect()->route('stock-succursales.index')
+            ->with('success', 'Stock en succursale créé avec succès');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(StockSuccursale $stockSuccursale)
+    public function show(string $stockSuccursale)
     {
-        //
+        $stockSuccursale = StockSuccursale::where('ref', $stockSuccursale)->with('produit', 'succursale', 'user')->firstOrFail();
+        return inertia('StockSuccursales/Show', [
+            'stock' => $stockSuccursale,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(StockSuccursale $stockSuccursale)
+    public function edit(string $stockSuccursale)
     {
-        //
+        $stockSuccursale = StockSuccursale::where('ref', $stockSuccursale)->with('produit', 'succursale', 'user')->firstOrFail();
+        return inertia('StockSuccursales/Edit', [
+            'stock' => $stockSuccursale,
+            //'produits' => Produit::active()->get(),
+            //'succursales' => Succursale::all(),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, StockSuccursale $stockSuccursale)
+    public function update(Request $request, string $stockSuccursale)
     {
-        //
+        $stockSuccursale = StockSuccursale::where('ref', $stockSuccursale)->firstOrFail();
+        $request->validate([
+            'quantite' => 'required|integer|min:0',
+            'seuil_alerte' => 'required|integer|min:1',
+        ]);
+
+        $stockSuccursale->update([
+            'quantite' => $request->quantite,
+            'seuil_alerte' => $request->seuil_alerte,
+        ]);
+
+        return redirect()->route('stock-succursales.index')
+            ->with('success', 'Stock en succursale mis à jour avec succès');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(StockSuccursale $stockSuccursale)
+    public function destroy(string $stockSuccursale)
     {
-        //
+        $stockSuccursale = StockSuccursale::where('ref', $stockSuccursale)->firstOrFail();
+        $stockSuccursale->delete();
+
+        return redirect()->route('stock-succursales.index')
+            ->with('success', 'Stock en succursale supprimé avec succès');
     }
 }

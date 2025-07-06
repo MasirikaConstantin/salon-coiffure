@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Produit;
 use App\Models\Service;
 use App\Models\Stock;
+use App\Models\StockSuccursale;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
 
         //Service::factory(20)->create();
         //Produit::factory(120)->create();
-        Stock::factory(120)->create();
+        //Stock::factory(120)->create();
+        StockSuccursale::factory(120)->create();
     }
 }
