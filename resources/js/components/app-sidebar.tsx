@@ -37,22 +37,22 @@ const mainNavItems: NavItem[] = [
         ],
       },
       {
-        title: 'Inventaire',
+        title: 'Les Produits',
         icon: Package,
         items: [
           {
             title: 'Produits',
-            href: '/products',
+            href: '/produits',
             icon: ShoppingBasket,
           },
           {
             title: 'Stock',
-            href: '/inventory',
+            href: '/stocks',
             icon: Warehouse,
           },
           {
             title: 'Commandes',
-            href: '/orders',
+            href: '/commandes',
             icon: Truck,
           },
         ],

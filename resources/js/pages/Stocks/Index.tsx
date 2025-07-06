@@ -6,13 +6,12 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { toast } from 'sonner';
-import { Pencil, Plus, Trash2, Eye, Search } from 'lucide-react';
+import { Pencil, Plus, Trash2, Eye, AlertTriangle, Search } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { useState, useEffect } from 'react';
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, PaginationEllipsis } from '@/components/ui/pagination';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,22 +19,22 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/dashboard',
     },
     {
-        title: 'Clients',
-        href: '/clients',
+        title: 'Gestion des Stocks',
+        href: '/stocks',
     },
 ];
 
-export default function ClientIndex({ auth }: { auth: Auth }) {
-    const { flash, clients, filters } = usePage<SharedData & { 
-        clients: any, 
-        filters: { search?: string } 
+export default function StockIndex({ auth }: { auth: Auth }) {
+    const { flash, stocks, produits } = usePage<SharedData & { 
+        stocks: any,
+        produits: any[]
     }>().props;
 
-    const [search, setSearch] = useState(filters.search || '');
-    // Délai pour la recherche
+    const [search, setSearch] = useState('');
+
     useEffect(() => {
         const timer = setTimeout(() => {
-            router.get(route('clients.index'), { search }, {
+            router.get(route('stocks.index'), { search }, {
                 preserveState: true,
                 replace: true
             });
@@ -48,15 +47,21 @@ export default function ClientIndex({ auth }: { auth: Auth }) {
     flash.success && toast.success(flash.success);
 
     const handleDelete = (ref: string) => {
-        router.delete(route('clients.destroy', ref));
+        router.delete(route('stocks.destroy', ref));
+    };
+
+    const toggleStatus = (stock: any) => {
+        router.patch(route('stocks.toggle-status', stock.ref), {
+            actif: !stock.actif
+        });
     };
 
     return (
         <AppLayout auth={auth} breadcrumbs={breadcrumbs}>
-            <Head title="Clients" />
+            <Head title="Gestion des Stocks" />
             <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <h1 className="text-2xl font-bold tracking-tight">Gestion des clients</h1>
+                    <h1 className="text-2xl font-bold tracking-tight">Gestion des Stocks</h1>
                     <div className="flex gap-2">
                         <div className="relative w-full md:w-64">
                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -67,10 +72,10 @@ export default function ClientIndex({ auth }: { auth: Auth }) {
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </div>
-                        <Link href={route('clients.create')}>
+                        <Link href={route('stocks.create')}>
                             <Button>
                                 <Plus className="mr-2 h-4 w-4" />
-                                Ajouter un client
+                                Ajouter un stock
                             </Button>
                         </Link>
                     </div>
@@ -78,59 +83,67 @@ export default function ClientIndex({ auth }: { auth: Auth }) {
                 <div className="rounded-lg border shadow-sm">
                     <Table>
                         <TableCaption>
-                            {clients.total > 0 ? (
-                                `Affichage des clients ${clients.from} à ${clients.to} sur ${clients.total}`
+                            {stocks.total > 0 ? (
+                                `Affichage des stocks ${stocks.from} à ${stocks.to} sur ${stocks.total}`
                             ) : (
-                                'Aucun client trouvé'
+                                'Aucun stock trouvé'
                             )}
                         </TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-12">#</TableHead>
-                                <TableHead>Nom</TableHead>
-                                <TableHead>Téléphone</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Succursale</TableHead>
-                                <TableHead>Enregistré par</TableHead>
+                                <TableHead>Produit</TableHead>
+                                <TableHead>Quantité</TableHead>
+                                <TableHead>Seuil d'alerte</TableHead>
+                                <TableHead>Statut</TableHead>
+                                <TableHead>Créé par</TableHead>
                                 <TableHead>Date création</TableHead>
                                 <TableHead>Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {clients.data.map((client: any, index: any) => (
-                                <TableRow key={client.id}>
+                            {stocks.data.map((stock: any) => (
+                                <TableRow key={stock.id} >
                                     <TableCell className="font-medium">
-                                        {clients.from + index}
-                                    </TableCell>
-                                    <TableCell className="font-medium">{client.name}</TableCell>
-                                    <TableCell>{client.telephone.slice(0, 15) || '-'}</TableCell>
-                                    <TableCell>{client.email.slice(0, 15) + '...' || '-'}</TableCell>
-                                    <TableCell>
-                                    {client.succursale?.nom}
+                                        {stock.produit?.name || 'Produit supprimé'}
                                     </TableCell>
                                     <TableCell>
-                                        {client.enregistre_par ? (
-                                            <Badge variant="outline">
-                                                {client.enregistre_par?.name}
-                                            </Badge>
-                                        ) : (
-                                            '-'
-                                        )}
+                                        <span className={stock.quantite <= stock.quantite_alerte ? 'font-bold text-red-600' : ''}>
+                                            {stock.quantite}
+                                            {stock.quantite <= stock.quantite_alerte && (
+                                                <AlertTriangle className="ml-2 inline h-4 w-4" />
+                                            )}
+                                        </span>
+                                    </TableCell>
+                                    <TableCell>{stock.quantite_alerte}</TableCell>
+                                    <TableCell>
+                                        <Badge variant={stock.actif ? 'default' : 'destructive'}>
+                                            {stock.actif ? 'Actif' : 'Inactif'}
+                                        </Badge>
                                     </TableCell>
                                     <TableCell>
-                                        {format(new Date(client.created_at), 'PP', { locale: fr })}
+                                        {stock.user?.name || '-'}
+                                    </TableCell>
+                                    <TableCell>
+                                        {format(new Date(stock.created_at), 'PP', { locale: fr })}
                                     </TableCell>
                                     <TableCell className="flex gap-2">
-                                        <Link href={route('clients.show', client.ref)}>
+                                        <Link href={route('stocks.show', stock.ref)}>
                                             <Button variant="outline" size="sm">
                                                 <Eye className="h-4 w-4" />
                                             </Button>
                                         </Link>
-                                        <Link href={route('clients.edit', client.ref)}>
+                                        <Link href={route('stocks.edit', stock.ref)}>
                                             <Button variant="outline" size="sm">
                                                 <Pencil className="h-4 w-4" />
                                             </Button>
                                         </Link>
+                                        <Button 
+                                            variant="outline" 
+                                            size="sm"
+                                            onClick={() => toggleStatus(stock)}
+                                        >
+                                            {stock.actif ? 'Désactiver' : 'Activer'}
+                                        </Button>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
                                                 <Button variant="destructive" size="sm">
@@ -141,12 +154,12 @@ export default function ClientIndex({ auth }: { auth: Auth }) {
                                                 <AlertDialogHeader>
                                                     <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
                                                     <AlertDialogDescription>
-                                                        Cette action supprimera définitivement le client et ne pourra pas être annulée.
+                                                        Cette action supprimera définitivement ce stock et ne pourra pas être annulée.
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
                                                     <AlertDialogCancel>Annuler</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => handleDelete(client.ref)}>
+                                                    <AlertDialogAction onClick={() => handleDelete(stock.ref)}>
                                                         Supprimer
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
@@ -159,30 +172,30 @@ export default function ClientIndex({ auth }: { auth: Auth }) {
                     </Table>
                 </div>
                 
-                {clients.last_page > 1 && (
+                {stocks.last_page > 1 && (
                     <div className="flex items-center justify-end">
                         <Pagination>
                             <PaginationContent>
                                 <PaginationItem>
                                     <PaginationPrevious 
-                                        href={clients.prev_page_url || '#'}
+                                        href={stocks.prev_page_url || '#'}
                                         onClick={(e) => {
-                                            if (!clients.prev_page_url) {
+                                            if (!stocks.prev_page_url) {
                                                 e.preventDefault();
                                                 return;
                                             }
                                             e.preventDefault();
-                                            router.get(clients.prev_page_url, {}, {
+                                            router.get(stocks.prev_page_url, {}, {
                                                 preserveState: true,
                                                 replace: true,
                                                 preserveScroll: true
                                             });
                                         }}
-                                        className={!clients.prev_page_url ? 'pointer-events-none opacity-50' : ''}
+                                        className={!stocks.prev_page_url ? 'pointer-events-none opacity-50' : ''}
                                     />
                                 </PaginationItem>
                                 
-                                {clients.links.slice(1, -1).map((link: any, index: any) => {
+                                {stocks.links.slice(1, -1).map((link: any, index: any) => {
                                     if (link.label === '...') {
                                         return (
                                             <PaginationItem key={index}>
@@ -216,20 +229,20 @@ export default function ClientIndex({ auth }: { auth: Auth }) {
                                 
                                 <PaginationItem>
                                     <PaginationNext 
-                                        href={clients.next_page_url || '#'}
+                                        href={stocks.next_page_url || '#'}
                                         onClick={(e) => {
-                                            if (!clients.next_page_url) {
+                                            if (!stocks.next_page_url) {
                                                 e.preventDefault();
                                                 return;
                                             }
                                             e.preventDefault();
-                                            router.get(clients.next_page_url, {}, {
+                                            router.get(stocks.next_page_url, {}, {
                                                 preserveState: true,
                                                 replace: true,
                                                 preserveScroll: true
                                             });
                                         }}
-                                        className={!clients.next_page_url ? 'pointer-events-none opacity-50' : ''}
+                                        className={!stocks.next_page_url ? 'pointer-events-none opacity-50' : ''}
                                     />
                                 </PaginationItem>
                             </PaginationContent>

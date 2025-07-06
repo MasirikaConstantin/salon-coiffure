@@ -26,6 +26,13 @@ Route::middleware('auth','actif','role:admin')->group(function () {
 
 Route::middleware('auth','actif','role:admin,gerant')->group(function () {
     Route::resource('utilisateurs', \App\Http\Controllers\UserController::class);
+    Route::resource('stocks', \App\Http\Controllers\StockController::class);
+    Route::resource('produits', \App\Http\Controllers\ProduitController::class);    
+    Route::patch('produits/{produit}/update-status', [\App\Http\Controllers\ProduitController::class, 'updateStatus'])->name('produits.update-status');
+    
+// Route supplémentaire pour changer le statut
+Route::patch('/stocks/{stock}/toggle-status', [\App\Http\Controllers\StockController::class, 'toggleStatus'])
+    ->name('stocks.toggle-status');
 });
 Route::middleware('auth','actif','role:admin,gerant,coiffeur')->group(function () {
     Route::resource('clients', \App\Http\Controllers\ClientController::class);
